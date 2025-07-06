@@ -12,14 +12,17 @@ Este proyecto es una aplicación móvil desarrollada con **React Native + Expo (
 Instalar Expo CLI:
 Ejecutar los siguientes comandos en terminal.
 
+```bash
 npm install -g expo-cli
+1. En la terminal, crea el proyecto con Expo
+expo init escanner-3d-app
 
-1. En el prompt de selección, elige:
+2. En el prompt de selección, elige:
 ❯ blank (TypeScript)
 
 Ingresar al nuevo proyecto:
 
-2. cd escanner-3d-app
+3. cd escanner-3d-app
 
 
 Dependencias de navegación:
@@ -61,7 +64,9 @@ Comportamiento esperado:
 La app envía comandos vía fetch() a rutas como:
 
 http://192.168.4.1/girar
+
 http://192.168.4.1/subir
+
 http://192.168.4.1/mover?distancia=200
 
 El ESP32 responde con texto plano: "OK" o mensajes de estado.
