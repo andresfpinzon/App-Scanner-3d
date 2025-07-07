@@ -26,14 +26,13 @@ Ingresar al nuevo proyecto:
 
 
 Dependencias de navegación:
-npm install @react-navigation/native
-npm install @react-navigation/native-stack
-npm install react-native-screens react-native-safe-area-context
+```bash
+npm i @react-navigation/native @react-navigation/native-stack @react-navigation/stack react-native-screens react-native-safe-area-context 
 
 Ejecutar la App
 
-comando en terminal
-
+Comando en terminal
+```bash
 npm start
 
 Esto abrirá Metro Bundler en la consola.
