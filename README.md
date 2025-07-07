@@ -14,6 +14,7 @@ Ejecutar los siguientes comandos en terminal.
 
 ```bash
 npm install -g expo-cli
+```
 1. En la terminal, crea el proyecto con Expo
 expo init escanner-3d-app
 
@@ -27,13 +28,15 @@ Ingresar al nuevo proyecto:
 
 Dependencias de navegación:
 ```bash
-npm i @react-navigation/native @react-navigation/native-stack @react-navigation/stack react-native-screens react-native-safe-area-context 
+npm i @react-navigation/native @react-navigation/native-stack @react-navigation/stack react-native-screens react-native-safe-area-context
+```
 
 Ejecutar la App
 
 Comando en terminal
 ```bash
 npm start
+```
 
 Esto abrirá Metro Bundler en la consola.
 
