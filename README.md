@@ -47,6 +47,8 @@ Esto abrirá Metro Bundler en la consola.
 Estructura del Proyecto (MVC)
 Se organiza el proyecto en capas siguiendo un modelo MVC simplificado:
 
+```bash
+
 src/
 ├── controllers/
 │   └── EscanerController.ts       # Lógica del escáner y flujo de comandos
@@ -60,6 +62,7 @@ src/
 │   └── EscanerScreen.tsx          # Pantalla principal
 └── AppNavigator.tsx               # Navegación entre pantallas
 
+```
 El ESP32 debe actuar como servidor HTTP (modo Access Point o conectado a red WiFi).
 
 Comportamiento esperado:
