@@ -44,10 +44,10 @@ Esto abrirá Metro Bundler en la consola.
 
 -Para que los comandos se ejecuten correctamente, se debe estar en la misma red wifi que la tarjeta SP32.
 
-Estructura del Proyecto (MVC)
+## Estructura del Proyecto (MVC)
 Se organiza el proyecto en capas siguiendo un modelo MVC simplificado:
 
-```bash
+```plaintext
 
 src/
 ├── controllers/
