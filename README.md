@@ -62,7 +62,6 @@ src/
 │   └── EscanerScreen.tsx          # Pantalla principal
 └── AppNavigator.tsx               # Navegación entre pantallas
 
-```
 El ESP32 debe actuar como servidor HTTP (modo Access Point o conectado a red WiFi).
 
 Comportamiento esperado:
