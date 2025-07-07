@@ -15,23 +15,28 @@ Ejecutar los siguientes comandos en terminal.
 ```bash
 $ npm install -g expo-cli
 ```
-# 1. En la terminal, crea el proyecto con Expo
-expo init escanner-3d-app
+1. En la terminal, crea el proyecto con Expo
 
-# 2. En el prompt de selección, elige:
+```bash
+$ expo init escanner-3d-app
+```
+
+2. En el prompt de selección, elige:
 ❯ blank (TypeScript)
 
-# Ingresar al nuevo proyecto:
+Ingresar al nuevo proyecto:
+```bash
+$ cd "nombre-donde-la-carpeta-donde-se-ubica"
+```
+ cd escanner-3d-app
 
-3. cd escanner-3d-app
 
-
-# Dependencias de navegación:
+Dependencias de navegación:
 ```bash
 $ npm i @react-navigation/native @react-navigation/native-stack @react-navigation/stack react-native-screens react-native-safe-area-context
 ```
 
-# Ejecutar la App
+Ejecutar la App
 
 Comando en terminal
 ```bash
