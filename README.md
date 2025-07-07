@@ -9,29 +9,29 @@ Este proyecto es una aplicación móvil desarrollada con **React Native + Expo (
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Expo Go (en tu celular Android o iOS)](https://expo.dev/client)
 
-Instalar Expo CLI:
+# Instalar Expo CLI:
 Ejecutar los siguientes comandos en terminal.
 
 ```bash
 $ npm install -g expo-cli
 ```
-1. En la terminal, crea el proyecto con Expo
+# 1. En la terminal, crea el proyecto con Expo
 expo init escanner-3d-app
 
-2. En el prompt de selección, elige:
+# 2. En el prompt de selección, elige:
 ❯ blank (TypeScript)
 
-Ingresar al nuevo proyecto:
+# Ingresar al nuevo proyecto:
 
 3. cd escanner-3d-app
 
 
-Dependencias de navegación:
+# Dependencias de navegación:
 ```bash
 $ npm i @react-navigation/native @react-navigation/native-stack @react-navigation/stack react-native-screens react-native-safe-area-context
 ```
 
-Ejecutar la App
+# Ejecutar la App
 
 Comando en terminal
 ```bash
@@ -47,7 +47,7 @@ Esto abrirá Metro Bundler en la consola.
 ## Estructura del Proyecto (MVC)
 Se organiza el proyecto en capas siguiendo un modelo MVC simplificado:
 
-```plaintext
+```markdown
 
 src/
 ├── controllers/
