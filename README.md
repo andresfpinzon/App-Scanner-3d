@@ -28,8 +28,6 @@ Ingresar al nuevo proyecto:
 ```bash
 $ cd "nombre-donde-la-carpeta-donde-se-ubica"
 ```
- cd escanner-3d-app
-
 
 Dependencias de navegación:
 ```bash
