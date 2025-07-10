@@ -1,40 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, Card, Title, Paragraph, Snackbar } from 'react-native-paper';
-import NetInfo from '@react-native-community/netinfo';
-import {CustomSlider} from '../components/slider'; // Ajusta la ruta según tu estructura
+import CustomSlider from '../components/CustomSlider';
+import { Esp32Service } from '../services/Esp32Service';
 
-const ESCANER_SSID = 'ESP_SCANNER';
+const ESCANER_SSID = 'ESP_ESCANER';
 const ESCANER_PASSWORD = '12345678';
 const ESP32_URL = 'http://192.168.4.1';
 
 const EscanerScreen = () => {
-  const [angulo, setAngulo] = useState(45);
-  const [altura, setAltura] = useState(100);
-  const [wifiConnected, setWifiConnected] = useState(false);
+  const [angulo, setAngulo] = useState(0);
+  const [altura, setAltura] = useState(0);
+  const [ancho, setAncho] = useState(0);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      const connected = state.type === 'wifi' && state.details?.ssid === ESCANER_SSID;
-      setWifiConnected(connected);
-      if (!connected) {
-        setSnackbarMessage('No estás conectado a la red ESP_SCANNER');
-        setSnackbarVisible(true);
-      }
-    });
+  const lastSentAngle = useRef<number>(-1);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-    return () => unsubscribe();
+  useEffect(() => {
+    sincronizarAnguloDesdeESP32();
   }, []);
 
-  const iniciarEscaneo = async () => {
-    if (!wifiConnected) {
-      setSnackbarMessage('Conéctese primero a la red ESP_SCANNER');
-      setSnackbarVisible(true);
-      return;
+  const sincronizarAnguloDesdeESP32 = async () => {
+    try {
+      const anguloActual = await Esp32Service.getAngulo();
+      if (anguloActual !== null) {
+        setAngulo(anguloActual);
+        lastSentAngle.current = anguloActual;
+      }
+    } catch (error) {
+      console.warn("No se pudo sincronizar el ángulo desde ESP32");
     }
+  };
+
+  const iniciarEscaneo = async () => {
 
     setLoading(true);
 
@@ -58,6 +59,24 @@ const EscanerScreen = () => {
     }
   };
 
+  const handleAnguloChange = (valor: number) => {
+    setAngulo(valor);
+
+
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+
+    debounceTimeout.current = setTimeout(async () => {
+      if (valor !== lastSentAngle.current) {
+        try {
+          await Esp32Service.setAngulo(valor);
+          lastSentAngle.current = valor;
+        } catch (error) {
+          console.warn("Error al enviar ángulo al ESP32:", error);
+        }
+      }
+    }, 300);
+  };
+
   return (
     <View style={styles.container}>
       <Card style={styles.card}>
@@ -75,8 +94,8 @@ const EscanerScreen = () => {
             title="Inclinación del sensor"
             value={angulo}
             min={0}
-            max={90}
-            onChange={setAngulo}
+            max={90} 
+            onChange={handleAnguloChange}
             unit="°"
           />
         </Card.Content>
@@ -85,7 +104,20 @@ const EscanerScreen = () => {
       <Card style={styles.controlCard}>
         <Card.Content>
           <CustomSlider
-            title="Altura del riel"
+            title="Ancho del objeto escaneado"
+            value={ancho}
+            min={0}
+            max={30}
+            onChange={setAncho}
+            unit="cm"
+          />
+        </Card.Content>
+      </Card>
+
+      <Card style={styles.controlCard}>
+        <Card.Content>
+          <CustomSlider
+            title="Alto del objeto escaneado"
             value={altura}
             min={0}
             max={200}
@@ -141,6 +173,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-
-

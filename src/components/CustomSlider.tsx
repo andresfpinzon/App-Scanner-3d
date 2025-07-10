@@ -11,7 +11,7 @@ interface Props {
   unit?: string;
 }
 
-export const CustomSlider: React.FC<Props> = ({ title, value, min, max, onChange, unit = '' }) => {
+const CustomSlider: React.FC<Props> = ({ title, value, min, max, onChange, unit = '' }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{title}</Text>
@@ -35,3 +35,5 @@ const styles = StyleSheet.create({
   label: { fontSize: 16, fontWeight: '600' },
   value: { fontSize: 14, color: '#555' }
 });
+
+export default CustomSlider;
