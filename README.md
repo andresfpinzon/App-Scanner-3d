@@ -9,32 +9,39 @@ Este proyecto es una aplicación móvil desarrollada con **React Native + Expo (
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Expo Go (en tu celular Android o iOS)](https://expo.dev/client)
 
-Instalar Expo CLI:
+# Instalar Expo CLI:
 Ejecutar los siguientes comandos en terminal.
 
 ```bash
-npm install -g expo-cli
+$ npm install -g expo-cli
+```
 1. En la terminal, crea el proyecto con Expo
-expo init escanner-3d-app
+
+```bash
+$ expo init escanner-3d-app
+```
 
 2. En el prompt de selección, elige:
 ❯ blank (TypeScript)
 
 Ingresar al nuevo proyecto:
-
-3. cd escanner-3d-app
+```bash
+$ cd "nombre-donde-la-carpeta-donde-se-ubica"
+```
+ cd escanner-3d-app
 
 
 Dependencias de navegación:
-npm install @react-navigation/native
-npm install @react-navigation/native-stack
-npm install react-native-screens react-native-safe-area-context
+```bash
+$ npm i @react-navigation/native @react-navigation/native-stack @react-navigation/stack react-native-screens react-native-safe-area-context
+```
 
 Ejecutar la App
 
-comando en terminal
-
-npm start
+Comando en terminal
+```bash
+$ npm start
+```
 
 Esto abrirá Metro Bundler en la consola.
 
@@ -42,8 +49,10 @@ Esto abrirá Metro Bundler en la consola.
 
 -Para que los comandos se ejecuten correctamente, se debe estar en la misma red wifi que la tarjeta SP32.
 
-Estructura del Proyecto (MVC)
+## Estructura del Proyecto (MVC)
 Se organiza el proyecto en capas siguiendo un modelo MVC simplificado:
+
+```markdown
 
 src/
 ├── controllers/
@@ -57,7 +66,7 @@ src/
 ├── views/
 │   └── EscanerScreen.tsx          # Pantalla principal
 └── AppNavigator.tsx               # Navegación entre pantallas
-
+```
 El ESP32 debe actuar como servidor HTTP (modo Access Point o conectado a red WiFi).
 
 Comportamiento esperado:

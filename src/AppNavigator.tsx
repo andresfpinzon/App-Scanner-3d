@@ -1,18 +1,35 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { EscanerScreen } from "./views/EscanerScreen";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
+import EscanerScreen from './views/EscanerScreen';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Escaner: undefined;
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+const screenOptions: StackNavigationOptions = {
+  headerShown: true,
+  headerTitleAlign: 'center',
+  headerStyle: { backgroundColor: '#2196F3' },
+  headerTintColor: '#fff',
+  headerTitleStyle: { fontWeight: 'bold' },
+};
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Escaner">
-        <Stack.Screen name="Escaner" component={EscanerScreen} />
+      <Stack.Navigator initialRouteName="Escaner" screenOptions={screenOptions}>
+        <Stack.Screen
+          name="Escaner"
+          component={EscanerScreen}
+          options={{ title: 'Escáner 3D' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default AppNavigator;
+
