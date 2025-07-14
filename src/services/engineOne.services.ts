@@ -1,12 +1,12 @@
-const ESP32_BASE_URL = "http://192.168.4.1";
+import { ESP32_URL } from "../utils/constantes"
 
 
 
 export const engineOneServices = {
     startEngine: async () => {
-        await fetch(`${ESP32_BASE_URL}/start1`)
+        await fetch(`${ESP32_URL}/start1`)
     },
     stopEngine: async () => {
-        await fetch(`${ESP32_BASE_URL}/stop1`)
+        await fetch(`${ESP32_URL}/stop1`)
     }
 }
