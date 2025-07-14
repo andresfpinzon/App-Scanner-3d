@@ -49,7 +49,6 @@ const EscanerScreen = () => {
             try {
                 const [anguloActual] = await Promise.all([
                     Esp32Service.getAngulo(),
-                    // Puedes agregar más llamadas iniciales aquí
                 ]);
                 
                 if (isMounted.current && anguloActual !== null) {
