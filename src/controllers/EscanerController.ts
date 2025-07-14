@@ -1,5 +1,5 @@
 import { Motor } from "../models/EscanerModel";
-import { Esp32Service } from "../services/engineFour.services";
+import { engineFourServices } from "../services/engineFour.services";
 
 const TOTAL_MOTORES = 3;
 
@@ -13,10 +13,10 @@ export const EscanerController = {
   },
 
   activarMotor: async (motor: Motor) => {
-    await Esp32Service.startMotor(motor.id);
+    await engineFourServices.startMotor(motor.id);
   },
 
   detenerMotor: async (motor: Motor) => {
-    await Esp32Service.stopMotor(motor.id);
+    await engineFourServices.stopMotor(motor.id);
   }
 };
