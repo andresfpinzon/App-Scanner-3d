@@ -21,6 +21,10 @@ interface Props {
   onChange: (value: number) => void;
   unit?: string;
   step?: number;
+  thumbColor?: string;
+  minTrackColor?: string;
+  maxTrackColor?: string;
+  textColor?: string;
 }
 
 const CustomSlider: React.FC<Props> = ({
