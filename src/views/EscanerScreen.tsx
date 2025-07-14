@@ -1,17 +1,22 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text, Button, Card, Title, Paragraph, Snackbar } from 'react-native-paper';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { Text, Button, Card, Title, Snackbar, Divider } from 'react-native-paper';
 import CustomSlider from '../components/CustomSlider';
 import { engineFourServices } from '../services/engineFour.services';
 import { ESCANER_PASSWORD, ESCANER_SSID, ESP32_URL } from '../utils/constantes';
 
-
 const DEBOUNCE_DELAY = 300; // ms
+
+const ALTURA_PRESETS = [
+  { label: "Pequeño (50cm)", value: 50 },
+  { label: "Mediano (100cm)", value: 100 },
+  { label: "Grande (150cm)", value: 150 }
+];
 
 const EscanerScreen = () => {
     // Estados
     const [angulo, setAngulo] = useState(0);
-    const [altura, setAltura] = useState(0);
+    const [altura, setAltura] = useState(50);
     const [ancho, setAncho] = useState(0);
     const [snackbar, setSnackbar] = useState({
         visible: false,
@@ -98,8 +103,17 @@ const EscanerScreen = () => {
 
     // Handlers debounceados
     const handleAnguloChange = createDebouncedHandler('angulo');
-    const handleAlturaChange = createDebouncedHandler('altura');
     const handleAnchoChange = createDebouncedHandler('ancho');
+
+    // Handler para altura con presets
+    const handleAlturaPreset = (value: number) => {
+        setAltura(value);
+        // Enviar inmediatamente sin debounce
+        if (value !== lastSentValues.current.altura) {
+            // Aquí iría la llamada al servicio para altura si existiera
+            lastSentValues.current.altura = value;
+        }
+    };
 
     // Helper para snackbar
     const showSnackbar = (message: string) => {
@@ -131,20 +145,47 @@ const EscanerScreen = () => {
         }
     };
 
+    // Reiniciar valores
+    const reiniciarPosicion = () => {
+        // Resetear ángulo con debounce
+        handleAnguloChange(0);
+        
+        // Resetear altura (usa el primer preset)
+        const initialAltura = ALTURA_PRESETS[0].value;
+        setAltura(initialAltura);
+        lastSentValues.current.altura = initialAltura;
+        
+        // Resetear ancho
+        setAncho(0);
+        lastSentValues.current.ancho = 0;
+        
+        showSnackbar('Posición reiniciada');
+    };
+
     return (
-        <View style={styles.container}>
-            <Card style={styles.card}>
+        <ScrollView contentContainerStyle={styles.container}>
+            <Card style={styles.connectionCard}>
                 <Card.Content>
-                    <Title>Conexión WiFi requerida</Title>
-                    <Paragraph>
-                        Conéctese a la red <Text style={styles.bold}>{ESCANER_SSID}</Text> con la contraseña <Text style={styles.bold}>{ESCANER_PASSWORD}</Text>.
-                    </Paragraph>
+                    <Title style={styles.cardTitle}>Configuración WiFi</Title>
+                    <Divider style={styles.divider} />
+                    <Text style={styles.cardText}>
+                        Conéctese a la red: 
+                        <Text style={styles.highlight}> {ESCANER_SSID}</Text>
+                    </Text>
+                    <Text style={styles.cardText}>
+                        Contraseña: 
+                        <Text style={styles.highlight}> {ESCANER_PASSWORD}</Text>
+                    </Text>
                 </Card.Content>
             </Card>
 
-            {/* Sliders con debounce integrado */}
+            {/* Controles de escaneo */}
             <Card style={styles.controlCard}>
                 <Card.Content>
+                    <Title style={styles.cardTitle}>Ajustes de Escaneo</Title>
+                    <Divider style={styles.divider} />
+                    
+                    {/* Inclinación */}
                     <CustomSlider
                         title="Inclinación del sensor"
                         value={angulo}
@@ -152,13 +193,11 @@ const EscanerScreen = () => {
                         max={90}
                         onChange={handleAnguloChange}
                         unit="°"
-                        step={1} // Paso de 1 grado
+                        step={1}
+                        //style={styles.slider}
                     />
-                </Card.Content>
-            </Card>
-
-            <Card style={styles.controlCard}>
-                <Card.Content>
+                    
+                    {/* Ancho */}
                     <CustomSlider
                         title="Ancho del objeto (cm)"
                         value={ancho}
@@ -166,40 +205,59 @@ const EscanerScreen = () => {
                         max={30}
                         onChange={handleAnchoChange}
                         unit="cm"
-                        step={0.5} // Paso de 0.5 cm
+                        step={0.5}
+                        //style={styles.slider}
                     />
+                    
+                    {/* Altura con presets */}
+                    <Text style={styles.presetTitle}>Altura predefinida:</Text>
+                    <View style={styles.presetContainer}>
+                        {ALTURA_PRESETS.map((preset, index) => (
+                            <Button
+                                key={index}
+                                mode={altura === preset.value ? "contained" : "outlined"}
+                                onPress={() => handleAlturaPreset(preset.value)}
+                                style={[
+                                    styles.presetButton,
+                                    altura === preset.value && styles.selectedPreset
+                                ]}
+                                labelStyle={styles.presetLabel}
+                            >
+                                {preset.label}
+                            </Button>
+                        ))}
+                    </View>
                 </Card.Content>
             </Card>
 
-            <Card style={styles.controlCard}>
-                <Card.Content>
-                    <CustomSlider
-                        title="Altura del objeto (cm)"
-                        value={altura}
-                        min={0}
-                        max={200}
-                        onChange={handleAlturaChange}
-                        unit="cm"
-                        step={1} // Paso de 1 cm
-                    />
-                </Card.Content>
-            </Card>
-
-            <Button
-                mode="contained"
-                onPress={iniciarEscaneo}
-                style={styles.button}
-                disabled={loading}
-                loading={loading}
-                labelStyle={styles.buttonLabel}
-            >
-                Iniciar Escaneo
-            </Button>
+            {/* Acciones */}
+            <View style={styles.actionsContainer}>
+                <Button
+                    mode="outlined"
+                    onPress={reiniciarPosicion}
+                    style={styles.resetButton}
+                    labelStyle={styles.resetButtonLabel}
+                >
+                    Reiniciar Posición
+                </Button>
+                
+                <Button
+                    mode="contained"
+                    onPress={iniciarEscaneo}
+                    style={styles.scanButton}
+                    disabled={loading}
+                    loading={loading}
+                    labelStyle={styles.scanButtonLabel}
+                >
+                    Iniciar Escaneo
+                </Button>
+            </View>
 
             <Snackbar
                 visible={snackbar.visible}
                 onDismiss={() => setSnackbar(prev => ({ ...prev, visible: false }))}
                 duration={3000}
+                style={styles.snackbar}
                 action={{
                     label: 'OK',
                     onPress: () => setSnackbar(prev => ({ ...prev, visible: false })),
@@ -207,41 +265,99 @@ const EscanerScreen = () => {
             >
                 {snackbar.message}
             </Snackbar>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#F5F6FA',
+        flexGrow: 1,
+        padding: 16,
+        backgroundColor: '#f8f9fa',
     },
-    card: {
-        marginBottom: 20,
-        backgroundColor: '#fff',
+    connectionCard: {
+        backgroundColor: '#e3f2fd',
         borderRadius: 12,
-        elevation: 3,
+        marginBottom: 20,
+        elevation: 1,
     },
     controlCard: {
-        marginBottom: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffff',
         borderRadius: 12,
+        marginBottom: 20,
         elevation: 2,
     },
-    button: {
-        marginTop: 10,
-        paddingVertical: 8,
-        borderRadius: 8,
-        backgroundColor: '#4CAF50',
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 8,
+        color: '#1e3a8a',
     },
-    buttonLabel: {
+    cardText: {
+        fontSize: 15,
+        marginVertical: 4,
+        color: '#374151',
+    },
+    highlight: {
+        fontWeight: 'bold',
+        color: '#3b82f6',
+    },
+    divider: {
+        backgroundColor: '#dbeafe',
+        marginVertical: 8,
+        height: 1,
+    },
+    slider: {
+        marginVertical: 12,
+    },
+    presetTitle: {
+        fontSize: 15,
+        fontWeight: '500',
+        marginTop: 10,
+        marginBottom: 8,
+        color: '#374151',
+    },
+    presetContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+    },
+    presetButton: {
+        flexBasis: '48%',
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: '#d1d5db',
+    },
+    selectedPreset: {
+        backgroundColor: '#dbeafe',
+        borderColor: '#3b82f6',
+    },
+    presetLabel: {
+        fontSize: 13,
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 8,
+    },
+    resetButton: {
+        flex: 1,
+        marginRight: 8,
+        borderColor: '#3b82f6',
+    },
+    resetButtonLabel: {
+        color: '#3b82f6',
+    },
+    scanButton: {
+        flex: 1,
+        backgroundColor: '#1e40af',
+    },
+    scanButtonLabel: {
         color: 'white',
         fontWeight: 'bold',
     },
-    bold: {
-        fontWeight: 'bold',
-        color: '#2196F3',
+    snackbar: {
+        backgroundColor: '#1e3a8a',
     },
 });
 
