@@ -2,11 +2,10 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, Card, Title, Paragraph, Snackbar } from 'react-native-paper';
 import CustomSlider from '../components/CustomSlider';
-import { Esp32Service } from '../services/engineFour.services';
+import { engineFourServices } from '../services/engineFour.services';
+import { ESCANER_PASSWORD, ESCANER_SSID, ESP32_URL } from '../utils/constantes';
 
-const ESCANER_SSID = 'ESP_ESCANER';
-const ESCANER_PASSWORD = '12345678';
-const ESP32_URL = 'http://192.168.4.1';
+
 const DEBOUNCE_DELAY = 300; // ms
 
 const EscanerScreen = () => {
@@ -48,7 +47,7 @@ const EscanerScreen = () => {
         const init = async () => {
             try {
                 const [anguloActual] = await Promise.all([
-                    Esp32Service.getAngulo(),
+                    engineFourServices.getAngulo(),
                 ]);
                 
                 if (isMounted.current && anguloActual !== null) {
@@ -84,7 +83,7 @@ const EscanerScreen = () => {
                     if (value !== lastSentValues.current[type] && isMounted.current) {
                         // Aquí iría la llamada al servicio correspondiente
                         if (type === 'angulo') {
-                            await Esp32Service.setAngulo(value);
+                            await engineFourServices.setAngulo(value);
                         }
                         // Agregar else if para otros parámetros si es necesario
                         
