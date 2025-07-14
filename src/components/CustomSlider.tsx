@@ -10,8 +10,8 @@ import Animated, {
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const SLIDER_PADDING = 31; // Reducido para mejor ajuste
-const THUMB_SIZE = 34;
+const SLIDER_PADDING = 30;
+const THUMB_SIZE = 28;
 
 interface Props {
   title: string;
@@ -35,10 +35,14 @@ const CustomSlider: React.FC<Props> = ({
   onChange,
   unit = '',
   step = 1,
+  thumbColor = '#4CAF50',
+  minTrackColor = '#4CAF50',
+  maxTrackColor = '#d3d3d3',
+  textColor = '#333',
 }) => {
   const sliderPos = useSharedValue(value);
   const isSliding = useSharedValue(false);
-  const sliderWidth = SCREEN_WIDTH - SLIDER_PADDING * 4; // Ajuste del ancho
+  const sliderWidth = SCREEN_WIDTH - SLIDER_PADDING * 4;
 
   useEffect(() => {
     if (!isSliding.value) {
@@ -79,6 +83,7 @@ const CustomSlider: React.FC<Props> = ({
         [0, sliderWidth - THUMB_SIZE]
       )
     }],
+    backgroundColor: thumbColor,
   }));
 
   const trackStyle = useAnimatedStyle(() => ({
@@ -87,22 +92,23 @@ const CustomSlider: React.FC<Props> = ({
       [min, max],
       [0, sliderWidth]
     ),
+    backgroundColor: minTrackColor,
   }));
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{title}</Text>
+      <Text style={[styles.label, { color: textColor }]}>{title}</Text>
       
       <View style={styles.sliderContainer}>
         <GestureDetector gesture={panGesture}>
-          <View style={styles.trackBackground}>
+          <View style={[styles.trackBackground, { backgroundColor: maxTrackColor }]}>
             <Animated.View style={[styles.trackActive, trackStyle]} />
             <Animated.View style={[styles.thumb, thumbStyle]} />
           </View>
         </GestureDetector>
       </View>
 
-      <Text style={styles.value}>
+      <Text style={[styles.value, { color: textColor }]}>
         {Math.round(value / step) * step} {unit}
       </Text>
     </View>
@@ -111,15 +117,14 @@ const CustomSlider: React.FC<Props> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 12,
+    marginVertical: 20,
     width: '100%',
     paddingHorizontal: SLIDER_PADDING,
   },
   label: {
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
+    marginBottom: 12,
   },
   sliderContainer: {
     width: '100%',
@@ -127,16 +132,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   trackBackground: {
-    height: 4,
+    height: 6,
     width: '100%',
-    backgroundColor: '#d3d3d3',
-    borderRadius: 2,
+    borderRadius: 3,
     position: 'relative',
   },
   trackActive: {
     height: '100%',
-    backgroundColor: '#4CAF50',
-    borderRadius: 2,
+    borderRadius: 3,
     position: 'absolute',
     left: 0,
   },
@@ -144,21 +147,20 @@ const styles = StyleSheet.create({
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: THUMB_SIZE/2,
-    backgroundColor: '#4CAF50',
     position: 'absolute',
-    top: -THUMB_SIZE/2 + 2,
+    top: -THUMB_SIZE/2 + 3,
     zIndex: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 4,
   },
   value: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: 16,
+    fontWeight: '500',
     textAlign: 'center',
-    marginTop: 6,
+    marginTop: 8,
   },
 });
 
