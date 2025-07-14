@@ -8,7 +8,6 @@ import Animated, {
   runOnJS
 } from 'react-native-reanimated';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import { red700 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const SLIDER_PADDING = 31; // Reducido para mejor ajuste
