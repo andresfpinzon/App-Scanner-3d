@@ -12,7 +12,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 const screenOptions: StackNavigationOptions = {
   headerShown: true,
   headerTitleAlign: 'center',
-  headerStyle: { backgroundColor: '#2196F3' },
+  headerStyle: { backgroundColor: '#7210f3ff' },
   headerTintColor: '#fff',
   headerTitleStyle: { fontWeight: 'bold' },
 };

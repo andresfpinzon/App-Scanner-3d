@@ -19,10 +19,11 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.IUDC.Scanner3D",
+      "minSdkVersion": 20,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "minSdkVersion": 21
+        "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },

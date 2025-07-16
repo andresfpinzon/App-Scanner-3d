@@ -85,16 +85,16 @@ const EscanerScreen = () => {
       surfaceVariant: isDarkMode ? "#2d2d2d" : "#e3f2fd",
       text: isDarkMode ? "#e0e0e0" : "#333333",
       textSecondary: isDarkMode ? "#a0a0a0" : "#666666",
-      highlight: isDarkMode ? "#9d61e6ff" : "#1e88e5",
+      highlight: isDarkMode ? "#9d61e6ff" : "#1e40af",
       border: isDarkMode ? "#444444" : "#e0e0e0",
       snackbar: isDarkMode ? "#2d2d2d" : "#7866fd",
       button: isDarkMode ? "#9d61e6ff" : "#1e40af",
       buttonText: isDarkMode ? "#000000" : "#e3f2fd",
-      sliderThumb: isDarkMode ? "#9d61e6ff" : "#1e88e5",
+      sliderThumb: isDarkMode ? "#9d61e6ff" : "#1e40af",
       sliderTrack: isDarkMode ? "#3a3a3a" : "#e0e0e0",
-      sliderActive: isDarkMode ? "#9d61e6ff" : "#1e88e5",
+      sliderActive: isDarkMode ? "#9d61e6ff" : "#1e40af",
       wifiInfoBg: isDarkMode ? "#4f5256" : "#f0f8ff",
-      motorButton: isDarkMode ? "#9d61e6ff" : "#1e88e5",
+      motorButton: isDarkMode ? "#9d61e6ff" : "#1e40af",
     }),
     [isDarkMode, theme]
   );
@@ -389,6 +389,7 @@ const EscanerScreen = () => {
         divider: {
           backgroundColor: colors.border,
           marginVertical: 8,
+          marginTop: 20,
           height: 1,
         },
         alturaContainer: {
@@ -407,7 +408,7 @@ const EscanerScreen = () => {
         },
         currentAltura: {
           fontSize: isSmallScreen ? 14 : 15,
-          fontWeight: "500",
+          fontWeight: "bold",
           marginTop: 10,
           textAlign: "center",
           color: colors.highlight,
@@ -456,8 +457,8 @@ const EscanerScreen = () => {
           flex: 1, // Cada botón ocupa igual espacio
           marginHorizontal: 6, // Espaciado horizontal
           paddingVertical: 12, // Aumenté el padding vertical
-          borderRadius: 8,
-          minHeight: 40,
+          borderRadius: 15,
+          minHeight: 50,
           justifyContent: "center", // Centra contenido verticalmente
         },
 
@@ -486,10 +487,10 @@ const EscanerScreen = () => {
           flex: 1, // Ambos botones ocupan igual espacio
           backgroundColor: colors.motorButton,
           paddingVertical: 14, // Altura del botón
-          borderRadius: 8,
+          borderRadius: 30,
           alignItems: "center", // Centrado horizontal
           justifyContent: "center", // Centrado vertical
-          marginHorizontal: 4, // Pequeño margen lateral
+          marginHorizontal: 5, // Pequeño margen lateral
         },
         motorButtonLabel: {
           color: "#FFF",
@@ -570,7 +571,7 @@ const EscanerScreen = () => {
       {/* Controles de escaneo */}
       <Card style={styles.controlCard}>
         <Card.Content>
-          <Title style={styles.cardTitle}>Ajustes de Escaneo</Title>
+          <Title style={styles.cardTitle}>Ajustes del Scanner</Title>
           <Divider style={styles.divider} />
 
           {/* Inclinación - Controla Motor 4 */}
@@ -588,25 +589,25 @@ const EscanerScreen = () => {
             textColor={colors.text}
           />
           <Divider style={styles.divider} />
-          <Title style={styles.cardTitle}>Control del Motor 1</Title>
-          <View style={styles.motorActionsContainer}>
-            {/* Botón de Avance */}
-            <TouchableOpacity
-              onPressIn={() => engineOneServices.startEngine()}
-              style={[styles.actionButton, styles.motorButton]}
-            >
-              <Text style={styles.motorButtonLabel}>◀ Izquierda</Text>
-            </TouchableOpacity>
-
-            {/* Botón de Retroceso */}
-            <TouchableOpacity
-              onPressIn={() => {
-                engineFourServices.stopMotor;
-              }}
-              style={[styles.actionButton, styles.motorButton]}
-            >
-              <Text style={styles.motorButtonLabel}>Derecha ▶</Text>
-            </TouchableOpacity>
+          <View style={styles.alturaContainer}>
+            <Title style={styles.cardTitle}>Control del Motor 1</Title>
+            <View style={styles.motorActionsContainer}>
+              {/* Botón de Avance */}
+              <TouchableOpacity
+                onPressIn={() => engineOneServices.startEngine()}
+                style={[styles.actionButton, styles.motorButton]}
+              >
+                <Text style={styles.motorButtonLabel}>◀ Izquierda</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPressIn={() => {
+                  engineFourServices.stopMotor;
+                }}
+                style={[styles.actionButton, styles.motorButton]}
+              >
+                <Text style={styles.motorButtonLabel}>Derecha ▶</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <Divider style={styles.divider} />
 
@@ -634,36 +635,43 @@ const EscanerScreen = () => {
             </View>
             <Text style={styles.currentAltura}>Altura actual: {altura} cm</Text>
           </View>
+
+<View style = { styles.alturaContainer}>
+  <Text style={styles.presetTitle}>
+    Ciclos:
+  </Text>
+  
+</View>
+          <Divider style={styles.divider} />
+          <View style={styles.alturaContainer}>
+            {/* Acciones */}
+            <View style={styles.actionsContainer}>
+              <Button
+                mode="outlined"
+                onPress={reiniciarPosicion}
+                style={[styles.actionButton, styles.resetButton]}
+                labelStyle={styles.resetButtonLabel}
+                icon="restart"
+                contentStyle={styles.buttonContent}
+              >
+                Reiniciar
+              </Button>
+              <Button
+                mode="contained"
+                onPress={iniciarEscaneo}
+                style={[styles.actionButton, styles.scanButton]}
+                disabled={loading}
+                loading={loading}
+                labelStyle={styles.scanButtonLabel}
+                icon="camera"
+                contentStyle={styles.buttonContent}
+              >
+                {isSmallScreen ? "Escanear" : "Iniciar Escaneo"}
+              </Button>
+            </View>
+          </View>
         </Card.Content>
       </Card>
-
-
-      {/* Acciones */}
-      <View style={styles.actionsContainer}>
-        <Button
-          mode="outlined"
-          onPress={reiniciarPosicion}
-          style={[styles.actionButton, styles.resetButton]}
-          labelStyle={styles.resetButtonLabel}
-          icon="restart"
-          contentStyle={styles.buttonContent}
-        >
-          Reiniciar
-        </Button>
-
-        <Button
-          mode="contained"
-          onPress={iniciarEscaneo}
-          style={[styles.actionButton, styles.scanButton]}
-          disabled={loading}
-          loading={loading}
-          labelStyle={styles.scanButtonLabel}
-          icon="camera"
-          contentStyle={styles.buttonContent}
-        >
-          {isSmallScreen ? "Escanear" : "Iniciar Escaneo"}
-        </Button>
-      </View>
 
       <Snackbar
         visible={snackbar.visible}
@@ -703,7 +711,8 @@ export default EscanerScreen;
           /> */
 }
 
-{/* 
+{
+  /* 
       Control de motor 1
       <Card style={styles.controlCard}>
         <Card.Content>
@@ -729,12 +738,11 @@ export default EscanerScreen;
           </View>
         </Card.Content>
       </Card>
- */}
+ */
+}
 
-
-
- 
-   {/* Control de motor 1
+{
+  /* Control de motor 1
         <Card style={styles.controlCard}>
           <Card.Content>
             <Title style={styles.cardTitle}>Control del Motor 1</Title>
@@ -770,4 +778,5 @@ export default EscanerScreen;
               </Button>
             </View>
           </Card.Content>
-        </Card> */}
+        </Card> */
+}
