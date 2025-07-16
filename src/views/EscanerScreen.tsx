@@ -39,9 +39,15 @@ const ALTURA_PRESETS = [
   { label: "100 cm", value: 100 },
   { label: "150 cm", value: 150 },
 ];
+const CICLOS_PRESETS = [
+  { label: "1", value: 1 },
+  { label: "2", value: 2 },
+  { label: "3", value: 3 },
+];
 
 const EscanerScreen = () => {
   // Estados
+  const [ciclo, setCiclo] = useState(1);
   const [angulo, setAngulo] = useState(0);
   const [altura, setAltura] = useState(50);
   const [ancho, setAncho] = useState(0);
@@ -68,6 +74,19 @@ const EscanerScreen = () => {
     altura: -1,
     ancho: -1,
   });
+  
+  const cicloSentValues = useRef({
+    ciclo: -1,
+  })
+
+const handleCicloPreset = (value: number) => {
+  setCiclo(value);
+  // Si necesitas guardar el último valor enviado como con altura:
+  if (cicloSentValues.current.ciclo !== value) {
+    cicloSentValues.current.ciclo = value;
+  }
+};
+
   const debounceTimeouts = useRef({
     angulo: null as NodeJS.Timeout | null,
     altura: null as NodeJS.Timeout | null,
@@ -371,7 +390,6 @@ const EscanerScreen = () => {
           fontSize: isSmallScreen ? 16 : 18,
           fontWeight: "bold",
           color: colors.text,
-          marginRight: 10,
         },
         cardText: {
           fontSize: isSmallScreen ? 14 : 15,
@@ -389,7 +407,7 @@ const EscanerScreen = () => {
         divider: {
           backgroundColor: colors.border,
           marginVertical: 8,
-          marginTop: 20,
+          marginTop: 10,
           height: 1,
         },
         alturaContainer: {
@@ -426,6 +444,7 @@ const EscanerScreen = () => {
           borderRadius: 8,
           paddingVertical: 6,
           backgroundColor: isDarkMode ? "#333" : "#fff",
+          marginVertical: 10,
         },
         selectedPreset: {
           backgroundColor: colors.button,
@@ -591,6 +610,8 @@ const EscanerScreen = () => {
           <Divider style={styles.divider} />
           <View style={styles.alturaContainer}>
             <Title style={styles.cardTitle}>Control del Motor 1</Title>
+            <Divider style={styles.divider} />
+
             <View style={styles.motorActionsContainer}>
               {/* Botón de Avance */}
               <TouchableOpacity
@@ -609,11 +630,12 @@ const EscanerScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <Divider style={styles.divider} />
 
           {/* Altura con presets */}
           <View style={styles.alturaContainer}>
-            <Text style={styles.presetTitle}>Altura predefinida:</Text>
+            <Text style={styles.cardTitle}>Altura predefinida:</Text>
+            <Divider style={styles.divider} />
+
             <View style={styles.presetContainer}>
               {ALTURA_PRESETS.map((preset, index) => (
                 <Button
@@ -636,13 +658,8 @@ const EscanerScreen = () => {
             <Text style={styles.currentAltura}>Altura actual: {altura} cm</Text>
           </View>
 
-<View style = { styles.alturaContainer}>
-  <Text style={styles.presetTitle}>
-    Ciclos:
-  </Text>
-  
-</View>
-          <Divider style={styles.divider} />
+          
+
           <View style={styles.alturaContainer}>
             {/* Acciones */}
             <View style={styles.actionsContainer}>
@@ -712,36 +729,6 @@ export default EscanerScreen;
 }
 
 {
-  /* 
-      Control de motor 1
-      <Card style={styles.controlCard}>
-        <Card.Content>
-          <Title style={styles.cardTitle}>Control del Motor 1</Title>
-          <Divider style={styles.divider} />
-
-          <View style={styles.motorActionsContainer}>
-            <TouchableOpacity
-              onPressIn={() => engineOneServices.startEngine()}
-              style={[styles.actionButton, styles.motorButton]}
-            >
-              <Text style={styles.motorButtonLabel}>▲ Avance</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPressIn={() => {
-                engineFourServices.stopMotor;
-              }}
-              style={[styles.actionButton, styles.motorButton]}
-            >
-              <Text style={styles.motorButtonLabel}>▼ Retroceso</Text>
-            </TouchableOpacity>
-          </View>
-        </Card.Content>
-      </Card>
- */
-}
-
-{
   /* Control de motor 1
         <Card style={styles.controlCard}>
           <Card.Content>
@@ -780,3 +767,30 @@ export default EscanerScreen;
           </Card.Content>
         </Card> */
 }
+
+
+
+{/* <View style={styles.alturaContainer}>
+            <Text style={styles.cardTitle}>Ciclos:</Text>
+            <Divider style={styles.divider} />
+            <View style={styles.presetContainer}>
+              {CICLOS_PRESETS.map((preset, index) => (
+                <Button
+                  key={index}
+                  mode={altura === preset.value ? "contained" : "outlined"}
+                  onPress={() => handleCicloPreset(preset.value)}
+                  style={[
+                    styles.presetButton,
+                    ciclo === preset.value && styles.selectedPreset,
+                  ]}
+                  labelStyle={[
+                    styles.presetLabel,
+                    ciclo === preset.value && styles.selectedPresetLabel,
+                  ]}
+                >
+                  {preset.label}
+                </Button>
+              ))}
+            </View>
+            <Text style={styles.currentAltura}>Ciclo actual: {ciclo}</Text>
+          </View> */}
