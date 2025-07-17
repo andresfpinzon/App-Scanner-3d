@@ -74,18 +74,18 @@ const EscanerScreen = () => {
     altura: -1,
     ancho: -1,
   });
-  
+
   const cicloSentValues = useRef({
     ciclo: -1,
-  })
+  });
 
-const handleCicloPreset = (value: number) => {
-  setCiclo(value);
-  // Si necesitas guardar el último valor enviado como con altura:
-  if (cicloSentValues.current.ciclo !== value) {
-    cicloSentValues.current.ciclo = value;
-  }
-};
+  const handleCicloPreset = (value: number) => {
+    setCiclo(value);
+    // Si necesitas guardar el último valor enviado como con altura:
+    if (cicloSentValues.current.ciclo !== value) {
+      cicloSentValues.current.ciclo = value;
+    }
+  };
 
   const debounceTimeouts = useRef({
     angulo: null as NodeJS.Timeout | null,
@@ -99,21 +99,21 @@ const handleCicloPreset = (value: number) => {
     () => ({
       primary: theme.colors.primary,
       accent: theme.colors.secondary,
-      background: isDarkMode ? "#121212" : "#f8f9fa",
+      background: isDarkMode ? "#121212" : "#77777eff",
       surface: isDarkMode ? "#1e1e1e" : "#ffffff",
       surfaceVariant: isDarkMode ? "#2d2d2d" : "#e3f2fd",
       text: isDarkMode ? "#e0e0e0" : "#333333",
-      textSecondary: isDarkMode ? "#a0a0a0" : "#666666",
-      highlight: isDarkMode ? "#9d61e6ff" : "#1e40af",
+      textSecondary: isDarkMode ? "#a0a0a0" : "#00a6f3ff",
+      highlight: isDarkMode ? "#9d61e6ff" : "#666666",
       border: isDarkMode ? "#444444" : "#e0e0e0",
-      snackbar: isDarkMode ? "#2d2d2d" : "#7866fd",
-      button: isDarkMode ? "#9d61e6ff" : "#1e40af",
+      snackbar: isDarkMode ? "#2d2d2d" : "#00a6f3ff",
+      button: isDarkMode ? "#9d61e6ff" : "#00a6f3ff",
       buttonText: isDarkMode ? "#000000" : "#e3f2fd",
-      sliderThumb: isDarkMode ? "#9d61e6ff" : "#1e40af",
+      sliderThumb: isDarkMode ? "#9d61e6ff" : "#00a6f3ff",
       sliderTrack: isDarkMode ? "#3a3a3a" : "#e0e0e0",
-      sliderActive: isDarkMode ? "#9d61e6ff" : "#1e40af",
-      wifiInfoBg: isDarkMode ? "#4f5256" : "#f0f8ff",
-      motorButton: isDarkMode ? "#9d61e6ff" : "#1e40af",
+      sliderActive: isDarkMode ? "#9d61e6ff" : "#00a6f3ff",
+      wifiInfoBg: isDarkMode ? "#4f5256" : "#94d0ecff",
+      motorButton: isDarkMode ? "#9d61e6ff" : "#00a6f3ff",
     }),
     [isDarkMode, theme]
   );
@@ -550,6 +550,21 @@ const handleCicloPreset = (value: number) => {
           alignItems: "center",
           justifyContent: "center",
         },
+        verticalActionsContainer: {
+          flexDirection: "column", // Cambiado de "row" a "column"
+          justifyContent: "center", // Centrado vertical
+          alignItems: "stretch", // Los botones ocuparán todo el ancho
+          marginTop: 10,
+          gap: 10, // Espacio entre botones
+        },
+        verticalActionButton: {
+          width: "100%",
+          marginHorizontal: 0, // Eliminamos el margen horizontal
+          paddingVertical: 10,
+          borderRadius: 15,
+          minHeight: 10,
+          justifyContent: "center",
+        },
       }),
     [isSmallScreen, isDarkMode, colors]
   );
@@ -658,15 +673,13 @@ const handleCicloPreset = (value: number) => {
             <Text style={styles.currentAltura}>Altura actual: {altura} cm</Text>
           </View>
 
-          
-
           <View style={styles.alturaContainer}>
             {/* Acciones */}
-            <View style={styles.actionsContainer}>
+            <View style={styles.verticalActionsContainer}>
               <Button
                 mode="outlined"
                 onPress={reiniciarPosicion}
-                style={[styles.actionButton, styles.resetButton]}
+                style={[styles.verticalActionButton, styles.resetButton]}
                 labelStyle={styles.resetButtonLabel}
                 icon="restart"
                 contentStyle={styles.buttonContent}
@@ -676,7 +689,7 @@ const handleCicloPreset = (value: number) => {
               <Button
                 mode="contained"
                 onPress={iniciarEscaneo}
-                style={[styles.actionButton, styles.scanButton]}
+                style={[styles.verticalActionButton, styles.scanButton]}
                 disabled={loading}
                 loading={loading}
                 labelStyle={styles.scanButtonLabel}
@@ -768,9 +781,8 @@ export default EscanerScreen;
         </Card> */
 }
 
-
-
-{/* <View style={styles.alturaContainer}>
+{
+  /* <View style={styles.alturaContainer}>
             <Text style={styles.cardTitle}>Ciclos:</Text>
             <Divider style={styles.divider} />
             <View style={styles.presetContainer}>
@@ -793,4 +805,5 @@ export default EscanerScreen;
               ))}
             </View>
             <Text style={styles.currentAltura}>Ciclo actual: {ciclo}</Text>
-          </View> */}
+          </View> */
+}
